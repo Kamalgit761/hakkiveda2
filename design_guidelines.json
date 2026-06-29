@@ -1,0 +1,149 @@
+{
+  "brand": {
+    "name": "HAKKIVEDA",
+    "tagline": "Hakki Pikki Tribal Wisdom, Ayurvedic Healing",
+    "description": "A premium luxury Ayurvedic e-commerce website inspired by the centuries-old herbal knowledge of the Hakki Pikki Tribe. Combines authentic tribal wisdom with Ayurveda to create natural, effective, premium products for hair care, skin care, and personal wellness."
+  },
+  "theme": {
+    "mode": "light",
+    "archetype": "Archetype 1 (Organic & Earthy) + Archetype 5 (Luxury)",
+    "mood": "Premium, Elegant, Luxury, Modern, Minimal, Clean, Trust, Nature, Heritage",
+    "spacing_philosophy": "Generous Spacing (p-8 to p-32) to create breathing room. The UI should feel like a luxurious spa experience."
+  },
+  "colors": {
+    "primary": "#0F5B3A",
+    "secondary": "#C9A227",
+    "background": "#FAF8F3",
+    "accent": "#6B8E23",
+    "text": {
+      "main": "#222222",
+      "muted": "#555555",
+      "inverse": "#FAF8F3"
+    },
+    "surfaces": {
+      "card": "#FFFFFF",
+      "glass": "rgba(255, 255, 255, 0.7)"
+    },
+    "border": "rgba(15, 91, 58, 0.15)"
+  },
+  "typography": {
+    "fonts": {
+      "heading": "'Cormorant Garamond', serif",
+      "body": "'Outfit', sans-serif",
+      "accent": "'Playfair Display', serif"
+    },
+    "scale": {
+      "h1": "text-5xl md:text-6xl tracking-tight leading-tight",
+      "h2": "text-4xl md:text-5xl tracking-tight",
+      "h3": "text-2xl md:text-3xl",
+      "body": "text-base md:text-lg leading-relaxed",
+      "overline": "text-sm uppercase tracking-[0.2em] font-semibold text-[#6B8E23]"
+    }
+  },
+  "layout_and_components": {
+    "grid_strategy": {
+      "featured_products": "Bento Grid (asymmetric) to showcase star products like Adivasi Herbal Hair Oil.",
+      "shop_listing": "Symmetrical 3-column or 4-column grid with generous gap-8 for premium feel."
+    },
+    "buttons": {
+      "primary": "rounded-full bg-[#0F5B3A] text-[#FAF8F3] hover:bg-[#C9A227] hover:text-[#222222] transition-colors duration-300 px-8 py-3 text-sm tracking-wider uppercase",
+      "secondary": "rounded-full border-2 border-[#0F5B3A] text-[#0F5B3A] hover:bg-[#0F5B3A] hover:text-[#FAF8F3] transition-colors duration-300 px-8 py-3 text-sm tracking-wider uppercase",
+      "floating": "rounded-full shadow-xl bg-white p-4"
+    },
+    "cards": {
+      "product": "bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-[#0F5B3A]/10 overflow-hidden hover:shadow-[0_8px_30px_rgba(15,91,58,0.08)] transition-all duration-300",
+      "testimonial": "bg-[#FAF8F3] border border-[#C9A227]/30 rounded-2xl p-8 italic"
+    },
+    "navigation": {
+      "style": "Crystal Glassmorphism on scroll (backdrop-blur-xl bg-[#FAF8F3]/80 border-b border-[#0F5B3A]/10)",
+      "links": "text-[#222222] hover:text-[#0F5B3A] font-medium text-sm uppercase tracking-widest transition-colors"
+    },
+    "animations": {
+      "scroll": "Smooth scrolling via Lenis.",
+      "reveal": "Framer Motion staggered fade-up for product grids and text blocks.",
+      "hover": "Subtle image scale-up (1.05) within overflow-hidden containers for products."
+    }
+  },
+  "pages_blueprint": [
+    {
+      "name": "Homepage",
+      "sections": [
+        "Hero: Full height, immersive nature background with elegant typography and dual CTAs.",
+        "Marquee: Slow-moving editorial ribbon with tagline 'Hakki Pikki Tribal Wisdom • Ayurvedic Healing'.",
+        "Best Sellers: Asymmetric grid showcasing Top 3 products.",
+        "Collections: Hair Care & Skin Care split sections with imagery.",
+        "Heritage (About): Story of the Hakki Pikki tribe with earthy, grounded visuals.",
+        "Ingredients Showcase: High-end macro shots of herbs/gold leaf.",
+        "Testimonials: Elegant slider with soft shadows.",
+        "AI Features: Promo for 'AI Hair & Skin Quiz' for personalized routines."
+      ]
+    },
+    {
+      "name": "Shop",
+      "features": [
+        "Sidebar filters (Category, Concern, Price).",
+        "Clean product grid with Add to Cart / Wishlist quick actions.",
+        "Sort dropdown (Shadcn customized)."
+      ]
+    },
+    {
+      "name": "Product Detail",
+      "features": [
+        "Sticky product info on right, large scrolling image gallery on left.",
+        "Accordion (Shadcn) for Ingredients, Benefits, Directions.",
+        "Reviews section with elegant star ratings.",
+        "Related products cross-sell."
+      ]
+    },
+    {
+      "name": "Customer Dashboard",
+      "features": [
+        "Minimalist sidebar navigation (Orders, Profile, Addresses).",
+        "Clean table lists for order history.",
+        "AI Recommendations tab based on past purchases."
+      ]
+    },
+    {
+      "name": "Admin Dashboard",
+      "features": [
+        "Dense 'Control Room' grid layout.",
+        "Metrics (Sales, Orders, Users).",
+        "Product Management table."
+      ]
+    }
+  ],
+  "special_features": [
+    "AI Quizzes (Hair & Skin) guiding users to specific products.",
+    "Floating WhatsApp & Call buttons strictly placed in bottom-right/left.",
+    "Floating AI Chatbot for instant support.",
+    "Custom cursor or subtle scroll progress indicator for luxury feel."
+  ],
+  "media": {
+    "ai_generation_prompts": {
+      "logo": "Minimalist luxury logo for Ayurvedic brand 'HAKKIVEDA', elegant serif typography, subtle tribal leaf motif, forest green and gold colors, white background, high-end vector style.",
+      "hero_banner": "Wide-angle photograph of a mystical, sunlit herbal forest, rays of morning sunlight filtering through ancient trees, a luxurious amber glass cosmetic bottle resting on a mossy rock, cinematic lighting, photorealistic, depth of field.",
+      "product_mockup": "Premium amber glass dropper bottle with a textured ivory paper label, gold cap, resting on a white marble surface surrounded by fresh green Ayurvedic herbs and a hint of gold dust, studio lighting, hyper-realistic.",
+      "heritage_visual": "Abstract, respectful artistic representation of ancient tribal herbalism, earthy tones, terracotta, forest green, elegant silhouettes of hands grinding herbs in a stone mortar, soft lighting, gallery art style."
+    },
+    "fallback_images": {
+      "hero_nature": "https://images.pexels.com/photos/35210201/pexels-photo-35210201.jpeg",
+      "ingredients": "https://images.unsplash.com/photo-1550147760-44c9966d6bc7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxheXVydmVkaWMlMjBoZXJicyUyMGdyZWVuJTIwbGVhZnxlbnwwfHx8fDE3ODI1MzE0MTV8MA&ixlib=rb-4.1.0&q=85",
+      "product_bottle": "https://images.unsplash.com/photo-1608571702600-5a5419d31475?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwzfHxheXVydmVkaWMlMjBoYWlyJTIwb2lsJTIwYm90dGxlJTIwbmF0dXJlfGVufDB8fHx8MTc4MjQ4MzQzNHww&ixlib=rb-4.1.0&q=85",
+      "luxury_spa_texture": "https://images.pexels.com/photos/21316248/pexels-photo-21316248.jpeg",
+      "forest_light": "https://images.pexels.com/photos/35778303/pexels-photo-35778303.jpeg"
+    },
+    "products_list": [
+      "Hakkiveda Adivasi Herbal Hair Oil – 500ml and 250ml",
+      "Hakkiveda Adivasi 30 Herb Shampoo",
+      "Hakkiveda Adivasi Pain Killer Oil",
+      "Hakkiveda Beard Growth Oil",
+      "Hakkiveda Tan & Pigmentation Removal Cream 100g",
+      "Hakkiveda Tan Removal & Whitening Soap",
+      "Hakkiveda Anti-Mark Ayurvedic Cream 10g",
+      "Hakkiveda Body Wash for Skin Whitening & Tan Removal"
+    ]
+  },
+  "testing": {
+    "guideline": "All interactive and key informational elements MUST include a 'data-testid' attribute using kebab-case, role-based naming (e.g., 'data-testid=\"add-to-cart-button\"')."
+  }
+}

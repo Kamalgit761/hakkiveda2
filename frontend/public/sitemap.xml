@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://hakkiveda.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://hakkiveda.com/shop</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hakkiveda.com/shop/hair-care</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hakkiveda.com/shop/skin-care</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hakkiveda.com/about</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hakkiveda.com/contact</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://hakkiveda.com/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hakkiveda.com/quiz/hair</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hakkiveda.com/quiz/skin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hakkiveda.com/product/adivasi-herbal-hair-oil-500ml</loc><priority>0.8</priority></url>
+  <url><loc>https://hakkiveda.com/product/adivasi-herbal-hair-oil-250ml</loc><priority>0.8</priority></url>
+  <url><loc>https://hakkiveda.com/product/adivasi-30-herb-shampoo</loc><priority>0.8</priority></url>
+  <url><loc>https://hakkiveda.com/product/adivasi-pain-killer-oil</loc><priority>0.8</priority></url>
+  <url><loc>https://hakkiveda.com/product/beard-growth-oil</loc><priority>0.8</priority></url>
+  <url><loc>https://hakkiveda.com/product/tan-pigmentation-removal-cream</loc><priority>0.8</priority></url>
+  <url><loc>https://hakkiveda.com/product/tan-removal-whitening-soap</loc><priority>0.8</priority></url>
+  <url><loc>https://hakkiveda.com/product/anti-mark-ayurvedic-cream</loc><priority>0.8</priority></url>
+  <url><loc>https://hakkiveda.com/product/body-wash-skin-whitening</loc><priority>0.8</priority></url>
+</urlset>

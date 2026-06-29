@@ -1,0 +1,52 @@
+{
+  "summary": "Phase 3 Admin Dashboard tested end-to-end. Backend admin APIs (auth, stats, CRUD for products/coupons/blog, image upload+serve, order status advance, customers list, reviews/newsletter/messages, site-content homepage, profile update) all PASS. Non-admin gets 403, unauthenticated gets 401. Public regressions OK for /api/products. Frontend admin UI renders all 11 tabs, dashboard stats, and product modal with form after SPA login. One frontend bug confirmed: hard-reloading /admin while authenticated redirects to /auth.",
+  "tested_scope": ["backend", "frontend", "auth", "integration"],
+  "passed": [
+    "POST /api/auth/login admin returns token + user.is_admin=true",
+    "GET /api/admin/stats: total_orders=3, total_revenue=2777.2, total_customers=10, total_products=9, recent_orders[] present",
+    "GET /api/admin/stats with non-admin token => 403",
+    "GET /api/admin/stats without token => 401",
+    "POST/PUT/DELETE /api/admin/products full CRUD",
+    "POST /api/admin/upload returns {url:/api/static/uploads/<uuid>.png}, file accessible (HTTP 200)",
+    "GET /api/admin/orders + PUT /api/admin/orders/{id}/status with stage_idx => ok",
+    "GET /api/admin/customers returns 10 non-admin users",
+    "POST/DELETE /api/admin/coupons (TEST50) ok; GET listed",
+    "GET /api/admin/newsletter, /contact-messages, /reviews, /blog all 200",
+    "POST/PUT/DELETE /api/admin/blog full CRUD",
+    "PUT /api/admin/site-content/homepage saves; GET /api/site-content/homepage returns saved hero_title='T1 Test Hero Title'",
+    "PUT /api/admin/profile ok",
+    "Public /api/products still 200",
+    "Frontend: unauthenticated /admin redirects to /auth",
+    "Frontend: after admin login (SPA nav to /admin), all 11 sidebar tabs visible (dashboard, products, orders, customers, coupons, newsletter, messages, reviews, blog, homepage, profile)",
+    "Frontend: admin-dashboard-section renders",
+    "Frontend: add-product-btn opens product-form-modal with full form fields"
+  ],
+  "failed": [
+    {
+      "area": "frontend / admin route guard",
+      "issue": "Hard reload (or direct browser navigation) to /admin while an admin token exists in localStorage redirects to /auth instead of showing the admin panel. Cause: useEffect in Admin.jsx checks `if (!user) navigate('/auth')` before AuthContext finishes loading the user from /api/auth/me. SPA in-app navigation works fine.",
+      "evidence": "After successful login (token persisted in localStorage), `page.goto('/admin')` results in page.url=/auth. Same admin token via SPA pushState to /admin shows full panel with all 11 tabs.",
+      "priority": "HIGH"
+    },
+    {
+      "area": "backend regression check (non-critical to Phase 3)",
+      "issue": "GET /api/categories returned 404 and POST /api/ai/quiz returned 404 on the paths tried. These were not part of Phase 3 scope and the actual endpoint paths may differ; not verified further.",
+      "evidence": "categories: HTTP 404; ai-quiz POST /api/ai/quiz: HTTP 404",
+      "priority": "LOW"
+    },
+    {
+      "area": "frontend / modal UX (minor)",
+      "issue": "product-form-modal does not close on Escape key; only the X (close) button dismisses it. Modal also overlays sidebar buttons (intercepts pointer events) until closed — expected behaviour for a modal, but tests must always close it via the X button rather than Escape.",
+      "evidence": "Playwright: after page.keyboard.press('Escape'), modal still present; subsequent click on admin-tab-homepage intercepted by product-form-modal.",
+      "priority": "LOW"
+    }
+  ],
+  "action_items": [
+    "In /app/frontend/src/pages/Admin.jsx (and/or AuthContext), gate the redirect on a `loading` flag so the guard waits until /auth/me resolves before deciding. Recommended: `if (loading) return null; if (!user) navigate('/auth'); else if (!user.is_admin) ...`. This will fix hard-reload redirection bug on /admin.",
+    "(Optional) Add Escape-key handler to close product-form-modal for better UX.",
+    "(Optional) Verify exact public paths for categories and AI quiz; ensure they are exposed and documented."
+  ],
+  "success_rate": {"backend": "100%", "frontend": "85%"},
+  "retest_needed": true,
+  "full_testing_deferred": true
+}

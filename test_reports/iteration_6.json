@@ -1,0 +1,23 @@
+{
+  "summary": "Verified the /admin bug fix across 3 scenarios. Scenarios A and C pass; Scenario B FAILS — the described fix (auto-logout non-admin and render AdminLogin) is NOT implemented in Admin.jsx. Code at line 61 still does `toast.error('Admin access required'); navigate('/')` for non-admin users.",
+  "tested_scope": ["frontend", "auth"],
+  "passed": [
+    "Scenario A: Fresh browser visiting /admin renders [data-testid=admin-login-page] (no 'Admin access required' shown).",
+    "Scenario C: Submitting admin-login-email=hakkiveda@gmail.com / admin-login-password=Hakki@Admin2026 logs in successfully and renders [data-testid=admin-dashboard] (lands on Profile tab as expected for must_change_password)."
+  ],
+  "failed": [
+    {
+      "area": "Admin.jsx non-admin handling (Scenario B)",
+      "issue": "When a customer is logged in and visits /admin, the page does NOT auto-logout and does NOT render AdminLogin. Instead it shows toast 'Admin access required' and redirects to '/'. Customer JWT (hk_token) is still present in localStorage after visiting /admin.",
+      "evidence": "Registered new customer via /auth (testid auth-email/auth-password/auth-submit, switched via switch-register), landed on /account with token. Visited /admin -> ended on url='/', toast text='Admin access required', admin-login-page visible=false, admin-dashboard=false, hk_token still present in localStorage (no logout occurred). Confirmed by source: /app/frontend/src/pages/Admin.jsx line 61: `if (user && !user.is_admin) { toast.error(\"Admin access required\"); navigate(\"/\"); return; }` — no logout() call, no AdminLogin render path for authenticated non-admin.",
+      "priority": "HIGH"
+    }
+  ],
+  "action_items": [
+    "In /app/frontend/src/pages/Admin.jsx, replace the non-admin branch in the useEffect so that when `user && !user.is_admin`, call `logout()` (do not navigate away). Also change the render guard from `if (!user) return <AdminLogin/>;` to `if (!user || !user.is_admin) return <AdminLogin/>;` so the AdminLogin form is shown for any non-admin (including stale customer JWT).",
+    "Optionally drop the `toast.error('Admin access required')` for this case since the user simply needs the admin login form, not an error redirect."
+  ],
+  "success_rate": {"backend": "not tested", "frontend": "67% (2/3 scenarios)"},
+  "retest_needed": true,
+  "full_testing_deferred": true
+}

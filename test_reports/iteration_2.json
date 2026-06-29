@@ -1,0 +1,37 @@
+{
+  "summary": "Phase 2 (AI imagery + SEO) verified. All 11 generated PNGs served at /api/static/generated/* (200, image/png, 147KB-900KB). Sitemap.xml & robots.txt accessible at frontend root. Homepage, Shop (9 cards, 9 generated imgs, 0 broken), Product detail (main image + Product JSON-LD + product OG image + dynamic meta description), Cart (gen image, 0 broken) all render the new AI images correctly. Floating WhatsApp/Call/AI-Chat buttons present. AI Quiz /quiz/hair completed 5 questions and returned 3 recommendations with generated images (0 broken). Backend regression intact: register, /api/cart, /api/checkout (HKV order ID, TRIBAL10 10% coupon → 1349.1), /api/quiz/submit, /api/chat all pass.",
+  "tested_scope": ["frontend", "backend", "auth", "integration"],
+  "passed": [
+    "GET /api/static/generated/hero.png 200 image/png 898KB",
+    "GET /api/static/generated/logo.png 200 image/png 147KB",
+    "GET /api/static/generated/p_hair_oil_500.png 200 image/png 724KB",
+    "GET /sitemap.xml 200 valid <?xml ... <urlset>",
+    "GET /robots.txt 200 text/plain",
+    "Backend: GET /api/products returns 9 products",
+    "Backend: GET /api/products/adivasi-herbal-hair-oil-500ml returns image path /api/static/generated/p_hair_oil_500.png",
+    "Backend: POST /api/auth/register issues JWT (229 chars)",
+    "Backend: POST /api/cart adds item, GET /api/cart enriches product",
+    "Backend: POST /api/checkout returns HKV20260628AA3430, total 1349.1 with TRIBAL10 (10% off 1499) ✓",
+    "Backend: POST /api/quiz/submit (quiz_type=hair) returns 2 recommendations",
+    "Backend: POST /api/chat returns 268-char AI reply",
+    "Frontend Home: data-testid=home-page present; title contains HAKKIVEDA; hero.png referenced in DOM; dynamic <meta name=description>; OG tags present",
+    "Frontend Shop: 9 product cards, 9 imgs from /api/static/generated/, 0 broken",
+    "Frontend Product detail: title='Adivasi Herbal Hair Oil · HAKKIVEDA'; <script type=application/ld+json> @type=Product present; dynamic description; OG image = /api/static/generated/p_hair_oil_500.png; data-testid=product-main-image present",
+    "Frontend /quiz/hair: data-testid=quiz-page renders, 5-question flow → quiz-result with 3 generated product images (0 broken)",
+    "Frontend /auth: register flow → redirects to /account",
+    "Frontend Cart: shows generated product image, 0 broken; Checkout page renders with product image and correct ₹1499 total"
+  ],
+  "failed": [
+    {"area": "SEO/Home title", "issue": "Home <title> is 'Premium Ayurvedic Hair & Skin Care · HAKKIVEDA' rather than spec-requested 'HAKKIVEDA · Hakki Pikki Tribal Wisdom, Ayurvedic Healing' (that string only appears in meta description).", "evidence": "page.title() output", "priority": "LOW"},
+    {"area": "Home OG image", "issue": "Homepage og:image points to https://hakkiveda.com/og-default.jpg (external placeholder), and og:url is https://hakkiveda.com/. Product page OG resolves to local generated image correctly. Consider using /api/static/generated/hero.png and deployment URL on Home.", "evidence": "OG image=https://hakkiveda.com/og-default.jpg url=https://hakkiveda.com/", "priority": "LOW"},
+    {"area": "Checkout form testability", "issue": "Phone/Address/City/State/Pincode inputs lack name attributes and data-testids; only placeholders. Automated E2E place-order via UI could not fill these fields (browser native validation blocked submit). Backend checkout already verified working via curl with HKV order ID returned.", "evidence": "Native HTML validation tooltip 'Please fill out this field' on phone input; selector input[name=phone] returned 0", "priority": "MEDIUM"}
+  ],
+  "action_items": [
+    "(Optional/LOW) Update Home <title> to match spec or accept current SEO-friendly title.",
+    "(Optional/LOW) Replace Home og:image fallback with /api/static/generated/hero.png and og:url with REACT_APP_BACKEND_URL origin.",
+    "(MEDIUM) Add data-testid (or name attrs) to checkout form inputs (checkout-name, checkout-phone, checkout-line1, checkout-city, checkout-state, checkout-pincode, place-order-btn, apply-coupon-btn) to enable automated E2E place-order tests."
+  ],
+  "success_rate": {"backend": "100%", "frontend": "~92%"},
+  "retest_needed": false,
+  "full_testing_deferred": true
+}

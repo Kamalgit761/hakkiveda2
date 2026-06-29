@@ -1,0 +1,17 @@
+{
+  "summary": "Verified admin login bug fix: /admin now renders AdminLogin form (data-testid=admin-login-page) instead of 'Admin access required'. Backend login with hakkiveda@gmail.com works (returns is_admin:true, must_change_password:true). After login, full Admin Dashboard sidebar renders, Profile tab auto-selected with password-change warning. Homepage and /shop regression OK.",
+  "tested_scope": ["frontend", "backend", "auth", "integration"],
+  "passed": [
+    "GET /admin (no JWT) renders admin-login-page testid; no redirect to /auth; no 'Admin access required' message",
+    "POST /api/auth/login with hakkiveda@gmail.com/Hakki@Admin2026 -> 200, is_admin:true, must_change_password:true",
+    "Admin login form submission -> admin-dashboard sidebar visible (Dashboard/Products/Orders/Customers/Coupons/Newsletter/Messages/Reviews/Blog/Homepage/Profile)",
+    "Profile tab auto-selected after first login, password-change warning shown ('Please change your default password in Profile')",
+    "Regression: homepage (/) loads with correct title 'Premium Ayurvedic Hair & Skin Care · HAKKIVEDA'",
+    "Regression: /shop loads with content, no errors"
+  ],
+  "failed": [],
+  "action_items": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "retest_needed": false,
+  "full_testing_deferred": true
+}
