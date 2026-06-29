@@ -1,79 +1,68 @@
-# HAKKIVEDA — Premium Luxury Ayurvedic E-commerce
+# HAKKIVEDA — Product Requirements Doc
 
-## Original Problem
-Build a premium, luxurious Ayurvedic e-commerce website for the HAKKIVEDA brand inspired by the Hakki Pikki tribe's herbal wisdom. Tagline: "Hakki Pikki Tribal Wisdom, Ayurvedic Healing." Production-ready, scalable, SEO-friendly.
+## Original Problem Statement
+Make HAKKIVEDA completely independent of Emergent so it can be deployed on Railway and Hostinger VPS.
 
-## Tech Stack (as built)
-- React 19 + react-router-dom 7 + Tailwind + shadcn/ui + lucide-react + sonner
-- FastAPI + Motor (MongoDB) + JWT auth + bcrypt
-- Claude Sonnet 4.5 (via Emergent Universal Key) for AI Quiz + AI Chat
-- Cormorant Garamond + Outfit + Playfair Display (Google Fonts)
+### Key migration goals
+1. Remove `emergentintegrations==0.2.0` and all `from emergentintegrations.llm.chat import LlmChat, UserMessage` usages.
+2. Replace with the official **google-genai** SDK.
+3. Use **Gemini 2.5 Flash** for AI Chat and AI Hair/Skin Quiz.
+4. Use **Gemini 2.5 Flash Image (preview)** for brand image generation.
+5. Replace `EMERGENT_LLM_KEY` env var with `GOOGLE_API_KEY` everywhere.
+6. Project must deploy on Railway and Hostinger VPS using public PyPI packages only.
 
-## Brand
-- Colors: Forest Green #0F5B3A · Gold #C9A227 · Ivory #FAF8F3 · Olive #6B8E23
-- Phone: +91 76195 36831 · WhatsApp: wa.me/917619536831
+## Tech Stack
+- **Backend**: FastAPI + Motor (async MongoDB) + JWT auth + google-genai SDK
+- **Frontend**: React + craco + Tailwind + Radix UI
+- **DB**: MongoDB (Atlas or self-hosted)
+- **AI**: Google Gemini 2.5 Flash (text) + Gemini 2.5 Flash Image (preview)
 
-## Implemented (Feb 2026)
-### Backend (/app/backend/server.py)
-- JWT Auth: register, login, forgot-password, /me
-- Products: list (category/search filters), featured, best-sellers, detail (with related + reviews)
-- Cart, Wishlist, Addresses CRUD
-- Checkout: HKV-prefixed orders, 5-stage tracking, COD + mock_online, free shipping above ₹999
-- Coupons: TRIBAL10 (10%), AYUR20 (20% above ₹1500), HAKKI500 (₹500 off above ₹2500)
-- AI Quiz: /api/quiz/submit (hair/skin) using Claude Sonnet 4.5
-- AI Chat: /api/chat — Vana concierge persona
-- Newsletter, Contact form, Reviews CRUD
-- 9 seeded products + 7 seeded reviews
+## User Personas
+- **Customer**: shops products, takes Hair/Skin AI quiz, chats with "Vana" concierge, places COD/mock orders.
+- **Admin** (`hakkiveda@gmail.com`): manages products, orders, customers, coupons, blog, reviews, site content, profile.
 
-### Frontend Pages
-- Home (hero, marquee, best-sellers, collections, AI quiz CTA, heritage, ingredients, why-choose, testimonials)
-- Shop (filters, search, sort), ProductDetail (gallery, accordion, reviews, related)
-- Cart, Checkout (address, payment, coupon, place order), Order confirmation
-- Auth (login/register/forgot), Account (orders, addresses, profile, wishlist tabs)
-- AI Hair Quiz & Skin Quiz, Wishlist, About, Contact, Blog, OrderTracking, 404
-- Floating: WhatsApp + Call + Vana AI Chat panel — site-wide
+## Core Requirements (live & working)
+- Auth (register/login/forgot-password/JWT)
+- Products catalogue (9 seeded) with category, search, featured, best-sellers, detail w/ reviews + related
+- Cart, Wishlist, Addresses
+- Checkout (COD + mock online) → HKV-prefixed orders → 5-stage tracking
+- Coupons (TRIBAL10 10%, AYUR20 20% min ₹1500, HAKKI500 ₹500 flat min ₹2500)
+- Reviews (auth)
+- AI Hair/Skin Quiz (Gemini 2.5 Flash) with graceful fallback when key missing
+- AI Chat "Vana" (Gemini 2.5 Flash) with multi-turn context from MongoDB history
+- Newsletter, Contact
+- Admin Dashboard: stats, products CRUD, orders + status, customers, coupons CRUD, newsletter, contact, reviews moderation, blog CRUD, site content, profile, image upload
+- Payments config endpoint (Razorpay ready, currently mock + COD)
+- Razorpay & Resend email scaffolds (plug in keys to enable)
+- Brand image generation via `backend/generate_images.py` (Gemini 2.5 Flash Image)
 
-### Test Status (iteration_1.json)
-- ✅ All backend endpoints PASS
-- ✅ All frontend flows PASS (including real checkout, AI chat reply)
+## What's been implemented in this iteration (2026-06-29)
+- ✅ Cloned uploaded HAKKIVEDA project into `/app`.
+- ✅ Removed `emergentintegrations==0.2.0` from `requirements.txt`; uninstalled from venv.
+- ✅ Added `google-genai>=0.8.0`, `httpx`, `pillow` to `requirements.txt`.
+- ✅ Refactored `backend/server.py`:
+  - Replaced `from emergentintegrations.llm.chat import LlmChat, UserMessage` with `from google import genai` + `from google.genai import types as genai_types`.
+  - Replaced `EMERGENT_LLM_KEY` with `GOOGLE_API_KEY`; create `genai_client` only if key present.
+  - Migrated `/api/quiz/submit` to `client.aio.models.generate_content` with `system_instruction=QUIZ_SYSTEM_PROMPT` and `response_mime_type='application/json'`.
+  - Migrated `/api/chat` to multi-turn via `genai_types.Content` history loaded from MongoDB.
+- ✅ Refactored `backend/generate_images.py` to use `gemini-2.5-flash-image-preview` via `client.aio.models.generate_content` with `response_modalities=['IMAGE','TEXT']`.
+- ✅ Created `backend/.env.example`, `frontend/.env.example`.
+- ✅ Created Railway deployment files: `backend/Procfile`, `backend/runtime.txt`, `backend/railway.json`, `frontend/railway.json`.
+- ✅ Updated `DEPLOYMENT.md` — `EMERGENT_LLM_KEY` → `GOOGLE_API_KEY`, added a full Railway section.
+- ✅ Verified backend imports cleanly and starts (admin + 9 products + 7 reviews + homepage content seeded).
+- ✅ All 36 backend tests pass via testing agent (/app/test_reports/iteration_migration_1.json).
+- ✅ Verified `google-genai` SDK actually reaches Google's API (rejected dummy key with 400 INVALID_ARGUMENT — code path correct).
+- ✅ Frontend builds and loads against the migrated backend.
+- ✅ Final scan confirms ZERO `emergentintegrations`, `EMERGENT_LLM_KEY`, or `LlmChat` references in code, requirements, env files, or docs.
 
-## Deferred (P1 / next phases)
-- Admin Dashboard (product/order/customer management UI)
-- Real Razorpay integration (architecture ready — just add keys)
-- Email confirmations (transactional emails via SendGrid/Resend)
-- AI-generated logo & product imagery via Gemini Nano Banana (using curated stock for first build)
-- Advanced SEO (sitemap.xml, structured data JSON-LD per product, Open Graph per page)
-- Blog detail pages (currently list only)
-- Review submission UI on product page (backend ready)
-
-## Next Action Items
-- Optional: Generate brand logo & hero imagery via Nano Banana
-- Optional: Wire Razorpay keys when ready
-- Optional: Build admin dashboard
-
-## Phase 2 — Completed Feb 2026
-### AI-Generated Brand Imagery (Gemini Nano Banana via Universal Key)
-- 11 images generated and served at /api/static/generated/
-  - logo.png (147KB) — luxury monogram
-  - hero.png (898KB) — cinematic herbal forest with product bottle
-  - 9 product mockups (600-900KB each) — premium amber/glass bottles with HAKKIVEDA branding
-- DB products updated to use AI images
-- Frontend resolveImage() helper to prepend backend URL
-- Generation script: /app/backend/generate_images.py (re-runnable, idempotent)
-
-### Full SEO
-- Per-page dynamic meta tags via /app/frontend/src/components/SEO.jsx (vanilla DOM head manipulation — no library dependency)
-- Title, description, keywords, canonical, Open Graph, Twitter Cards
-- JSON-LD Product schema on product detail (name, image, price, ratings, availability)
-- JSON-LD Organization schema as default
-- /sitemap.xml with all 18 routes
-- /robots.txt with appropriate disallows for cart/auth/admin
-- Brand keywords focused on "hakki pikki tribe + ayurveda" blend
-
-### Test Report
-- /app/test_reports/iteration_2.json — all PASS, 0 issues
-
-## Still Deferred
-- Razorpay live integration (waiting on API keys)
-- Admin Dashboard (waiting on confirmation)
-- Email transactional sends
+## Backlog / Next Action Items (for the user)
+- **P0**: Add real `GOOGLE_API_KEY` (https://aistudio.google.com/app/apikey) to Railway/Hostinger env to enable live AI Chat & Quiz.
+- **P0**: Use the chat input's **Save to GitHub** button to push these migration changes to `https://github.com/Kamalgit761/hakkiveda1`.
+- **P1**: Deploy backend to Railway with the provided `backend/railway.json` and frontend to Railway/Vercel/Hostinger.
+- **P1**: Add Razorpay keys (`RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`) to enable live payments — scaffold already present.
+- **P1**: Add Resend key (`RESEND_API_KEY`) to enable transactional order-confirmation emails.
+- **P2** (optional improvements suggested by testing agent):
+  - Replace `Dict[str, Any]` admin bodies with Pydantic models.
+  - Cap `chat_history` to last N turns per session.
+  - Split `server.py` into routers (auth/products/cart/orders/admin/ai).
+- **P2**: Re-run a smoke test against `/api/chat` and `/api/quiz/submit` once `GOOGLE_API_KEY` is set in Railway.
