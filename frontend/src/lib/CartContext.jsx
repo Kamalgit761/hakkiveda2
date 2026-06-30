@@ -20,7 +20,10 @@ export const CartProvider = ({ children }) => {
     try { const res = await api.get("/wishlist"); setWishlist(res.data); } catch {}
   };
 
-  useEffect(() => { refreshCart(); refreshWishlist(); /* eslint-disable-next-line */ }, [user]);
+  useEffect(() => {
+  refreshCart();
+  refreshWishlist();
+}, [user, refreshCart, refreshWishlist]);
 
   const addToCart = async (product, qty = 1) => {
     if (!user) { toast.error("Please sign in to add items"); return false; }
