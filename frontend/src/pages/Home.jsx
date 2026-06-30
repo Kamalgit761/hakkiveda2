@@ -76,8 +76,11 @@ const Home = () => {
           <p className="text-hk-charcoal/65 max-w-xl mx-auto">Heritage formulations our family of customers returns to, season after season.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-         {(Array.isArray(bestSellers) ? bestSellers : []).slice(0, 4).map((p) => (
-  <ProductCard key={p.id} product={p} />
+       {(Array.isArray(bestSellers) ? bestSellers : [])
+  .slice(0, 4)
+  .map((p) => (
+    <ProductCard key={p.id} product={p} />
+  ))}
 ))}
         </div>
         <div className="text-center mt-10">
