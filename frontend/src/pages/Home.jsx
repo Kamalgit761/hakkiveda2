@@ -81,7 +81,6 @@ const Home = () => {
   .map((p) => (
     <ProductCard key={p.id} product={p} />
   ))}
-))}
         </div>
         <div className="text-center mt-10">
           <Link to="/shop" className="hk-btn-primary" data-testid="view-all-products">View All Products <ArrowRight size={14}/></Link>
