@@ -10,8 +10,18 @@ const Home = () => {
   const [featured, setFeatured] = useState([]);
 
   useEffect(() => {
-    api.get("/products/best-sellers").then((r) => setBestSellers(r.data)).catch(() => {});
-    api.get("/products/featured").then((r) => setFeatured(r.data)).catch(() => {});
+    api.get("/products/best-sellers")
+  .then((r) => {
+    console.log("Best Sellers API:", r.data);
+    setBestSellers(r.data);
+  })
+  .catch(console.error);
+    api.get("/products/featured")
+  .then((r) => {
+    console.log("Featured API:", r.data);
+    setFeatured(r.data);
+  })
+  .catch(console.error);
   }, []);
 
   return (
@@ -66,7 +76,9 @@ const Home = () => {
           <p className="text-hk-charcoal/65 max-w-xl mx-auto">Heritage formulations our family of customers returns to, season after season.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {bestSellers.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
+         {(Array.isArray(bestSellers) ? bestSellers : []).slice(0, 4).map((p) => (
+  <ProductCard key={p.id} product={p} />
+))}
         </div>
         <div className="text-center mt-10">
           <Link to="/shop" className="hk-btn-primary" data-testid="view-all-products">View All Products <ArrowRight size={14}/></Link>
@@ -187,7 +199,9 @@ const Home = () => {
             <Link to="/shop" className="text-sm uppercase tracking-widest text-hk-green hover:text-hk-gold">View all →</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featured.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
+           {(Array.isArray(featured) ? featured : []).slice(0, 4).map((p) => (
+  <ProductCard key={p.id} product={p} />
+))}
           </div>
         </section>
       )}
